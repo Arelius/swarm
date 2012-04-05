@@ -1,0 +1,1 @@
+To setup a virtual machine, after you do a basic install, the machine needs sudo installed with NOPASSWD for the provisioning user, and it needs to have the key from /keys/vbox.pub installed as an authorized key. Ensure that the ipaddress is setup properlly on boot, and guest additions are installed.
