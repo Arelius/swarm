@@ -17,6 +17,7 @@ options:
 EOS
 
   opt :cluster, "Cluster to provision on, EC2 or VBox", :type => :string, :default => "VBox"
+  opt :force, "Force an operation, required for delete.", :type => :bool, :defaule => false
 end
 
 cluster_remote = case opts[:cluster]
@@ -57,6 +58,7 @@ else
   when "delete"
     server.exists? or Trollop::die "VM #{server_name} doesn't exist!"
     (!server.running?) or Trollop::die "VM #{server_name} is running, needs to be stopped first."
+    opts[:force] or Trollop::die "Force option required for delete."
     server.delete_server()
   when "ssh"
     server.exists? or Trollop::die "VM #{server_name} doesn't exist!"
