@@ -79,4 +79,16 @@ module VBoxRemote
     vbox = VBox.new(node_name)
     return vbox
   end
+
+  def self.server_list()
+    vms = vboxmanage("list vms").scan(/"([^"]+)" \{([0-9a-zA-Z\-]+)\}/) do |vm|
+      if block_given?
+        yield vm[0]
+      else
+        vm[0]
+      end
+    end
+
+    return vms
+  end
 end

@@ -11,4 +11,8 @@ module EC2Remote
     ec2 = EC2.new(node_name)
     return ec2
   end
+  
+  def self.server_list()
+    return []
+  end
 end
