@@ -2,7 +2,7 @@ require 'trollop'
 
 $:.unshift(File.dirname(__FILE__))
 
-#require 'remote-bootstrap'
+require 'remote-bootstrap'
 require 'vbox-remote'
 require 'ec2-remote'
 
@@ -17,7 +17,8 @@ options:
 EOS
 
   opt :cluster, "Cluster to provision on, EC2 or VBox", :type => :string, :default => "VBox"
-  opt :force, "Force an operation, required for delete.", :type => :bool, :defaule => false
+  opt :force, "Force an operation, required for delete.", :type => :bool, :default => false
+  opt :bootstrap, "Skips the bootstrap on a new vm.", :type => :bool, :default => true
 end
 
 cluster_remote = case opts[:cluster]
@@ -51,6 +52,13 @@ else
     server.exists? or Trollop::die "VM #{server_name} doesn't exist!"
     !server.running? or Trollop::die "VM #{server_name} is already running."
     server.start_server()
+    if(opt[:bootstrap])
+      RemoteBootstrap.bootstrap_server(server)
+    end
+  when "bootstrap"
+    server.exists? or Trollop::die "VM #{server_name} doesn't exist!"
+    server.running? or Trollop::die "VM #{server_name} isn't running!"
+    RemoteBootstrap.bootstrap_server(server)
   when "stop"
     server.exists? or Trollop::die "VM #{server_name} doesn't exist!"
     server.running? or Trollop::die "VM #{server_name} isn't running!"
