@@ -52,13 +52,13 @@ else
     !server.exists? or Trollop::die "VM #{server_name} already exists!"
     server.init_server()
     server.start_server()
+    if(opts[:bootstrap])
+      RemoteBootstrap.bootstrap_server(server)
+    end
   when "start"
     server.exists? or Trollop::die "VM #{server_name} doesn't exist!"
     !server.running? or Trollop::die "VM #{server_name} is already running."
     server.start_server()
-    if(opt[:bootstrap])
-      RemoteBootstrap.bootstrap_server(server)
-    end
   when "bootstrap"
     server.exists? or Trollop::die "VM #{server_name} doesn't exist!"
     server.running? or Trollop::die "VM #{server_name} isn't running!"
