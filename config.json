@@ -1,0 +1,7 @@
+{
+    "vbox": {
+        "base-vm": "server-base",
+        "ssh-private-key": "keys/vbox",
+        "login-user": "debian"
+    }
+}

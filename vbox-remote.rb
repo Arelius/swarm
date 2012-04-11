@@ -1,13 +1,15 @@
+require 'swarm-config'
+
 def vboxmanage(params)
   return `VBoxManage #{params}`
 end
 
 class VBox
   def initialize(name)
-    @base_vm = "server-base"
+    @base_vm = SwarmConfig.vbox_base_vm
     @name = name
-    @ssh_key = File.expand_path(File.dirname(__FILE__) + "/keys/vbox")
-    @login_user = "debian"
+    @ssh_key = File.expand_path(File.dirname(__FILE__) + "/" + SwarmConfig.vbox_ssh_private_key)
+    @login_user = SwarmConfig.vbox_login_user
 
     if(exists? && running?)
       get_instance_info()

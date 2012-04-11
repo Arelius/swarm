@@ -2,6 +2,7 @@ require 'trollop'
 
 $:.unshift(File.dirname(__FILE__))
 
+require 'swarm-config'
 require 'remote-bootstrap'
 require 'vbox-remote'
 require 'ec2-remote'
@@ -19,6 +20,7 @@ EOS
   opt :cluster, "Cluster to provision on, EC2 or VBox", :type => :string, :default => "VBox"
   opt :force, "Force an operation, required for delete.", :type => :bool, :default => false
   opt :bootstrap, "Skips the bootstrap on a new vm.", :type => :bool, :default => true
+  opt :config, "Config file.", :type => :string, :default => "config.json"
 end
 
 cluster_remote = case opts[:cluster]
@@ -31,6 +33,8 @@ cluster_remote = case opts[:cluster]
                  end
 
 cmd = ARGV.shift or Trollop::die "Missing command"
+
+SwarmConfig.load_config(File.expand_path(File.dirname(__FILE__) + "/" + opts[:config]))
 
 case cmd
 when "list"
