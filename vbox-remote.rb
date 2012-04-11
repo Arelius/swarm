@@ -72,6 +72,10 @@ class VBox
   def login_username
     return @login_user
   end
+
+  def instance_name
+    return @name
+  end
 end
 
 module VBoxRemote
