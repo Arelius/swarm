@@ -19,7 +19,8 @@ EOS
 
   opt :cluster, "Cluster to provision on, EC2 or VBox", :type => :string, :default => "VBox"
   opt :force, "Force an operation, required for delete.", :type => :bool, :default => false
-  opt :bootstrap, "Skips the bootstrap on a new vm.", :type => :bool, :default => true
+  opt :bootstrap, "Runs the bootstrap on a new vm.", :type => :bool, :default => true
+  opt :cook, "Runs chef on a new vm.", :type => :bool, :default => true
   opt :config, "Config file.", :type => :string, :default => "config.json"
 end
 
