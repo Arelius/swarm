@@ -29,7 +29,10 @@ class RemoteBootstrap
     run_remote_command(server, "sudo apt-get update -y") and
     run_remote_command(server, "sudo apt-get install ruby1.9.1 ruby1.9.1-dev -y") and
     run_remote_command(server, "sudo gem1.9.1 install chef ohai --no-ri --no-rdoc") and
-    run_remote_command(server, "sudo ln -sf /var/lib/gems/1.9.1/bin/chef-solo /usr/bin/chef-solo") and
+    run_remote_command(server, "sudo ln -sf /var/lib/gems/1.9.1/bin/chef-solo /usr/bin/chef-solo") or return false;
+  end
+
+  def self.cook(server)
     run_remote_command(server, "sudo rm -rf /etc/chef/*") and
     remote_upload(server,
                   File.expand_path(File.dirname(__FILE__) + "/kitchen"),

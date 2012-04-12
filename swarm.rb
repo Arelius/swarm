@@ -54,6 +54,9 @@ else
     server.start_server()
     if(opts[:bootstrap])
       RemoteBootstrap.bootstrap_server(server)
+      if(opts[:cook])
+        RemoteBootstrap.cook(server)
+      end
     end
   when "start"
     server.exists? or Trollop::die "VM #{server_name} doesn't exist!"
@@ -63,6 +66,10 @@ else
     server.exists? or Trollop::die "VM #{server_name} doesn't exist!"
     server.running? or Trollop::die "VM #{server_name} isn't running!"
     RemoteBootstrap.bootstrap_server(server)
+  when "cook"
+    server.exists? or Trollop::die "VM #{server_name} doesn't exist!"
+    server.running? or Trollop::die "VM #{server_name} isn't running!"
+    RemoteBootstrap.cook(server)
   when "stop"
     server.exists? or Trollop::die "VM #{server_name} doesn't exist!"
     server.running? or Trollop::die "VM #{server_name} isn't running!"
