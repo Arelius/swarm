@@ -33,6 +33,7 @@ class RemoteBootstrap
   end
 
   def self.cook(server)
+    run_remote_command(server, "sudo mkdir /etc/chef") and
     run_remote_command(server, "sudo rm -rf /etc/chef/*") and
     remote_upload(server,
                   File.expand_path(File.dirname(__FILE__) + "/kitchen"),
