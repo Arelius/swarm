@@ -57,7 +57,7 @@ class VBox
     ifaces = vboxmanage("guestproperty get #{@name} /VirtualBox/GuestInfo/Net/0/V4/IP").scan(/Value: ([0-9.]+)/)
 
     if(ifaces.length == 0)
-          ifaces = vboxmanage("guestproperty wait #{@name} /VirtualBox/GuestInfo/Net/0/V4/IP").scan(/value: ([0-9.]+)/)[0][0]
+          ifaces = vboxmanage("guestproperty wait #{@name} /VirtualBox/GuestInfo/Net/0/V4/IP").scan(/value: ([0-9.]+)/)
     end
 
     @ip = ifaces[0][0]
