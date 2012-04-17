@@ -1,4 +1,6 @@
 require 'swarm-config'
+require 'uri'
+require 'net/http'
 
 def vboxmanage(params)
   return `VBoxManage #{params}`
@@ -83,6 +85,22 @@ class VBox
   end
 end
 
+def fetch(url)
+  uri = URI(url)
+
+  File.open(File.basename(uri.path), "w") do |f|
+    Net::HTTP.start(uri.host) do |http|
+      http.request_get(uri.path) do |resp|
+        resp.read_body do |segment|
+          f.write(segment)
+        end
+      end
+    end
+  end
+
+  return File.basename(uri.path)
+end
+
 module VBoxRemote
   def self.get_server(node_name)
     vbox = VBox.new(node_name)
@@ -99,5 +117,11 @@ module VBoxRemote
     end
 
     return vms
+  end
+
+  def self.install_base_image()
+    vm_image = fetch(SwarmConfig.vbox_base_vm_url)
+    vboxmanage("import #{vm_image}")
+    File.delete(vm_image)
   end
 end

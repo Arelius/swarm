@@ -1,5 +1,6 @@
 {
     "vbox": {
+        "base-vm-image-source": "http://host.url/server-base.ova",
         "base-vm": "server-base",
         "ssh-private-key": "keys/vbox",
         "login-user": "debian"

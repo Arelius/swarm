@@ -42,6 +42,8 @@ when "list"
   cluster_remote.server_list do |server_name|
     puts "\t#{server_name}"
   end
+when "updatebase"
+  cluster_remote.install_base_image()
 else
 
   server_name = ARGV.shift or Trollop::die "Missing vm_name"
