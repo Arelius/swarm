@@ -84,6 +84,10 @@ else
     server.exists? or Trollop::die "VM #{server_name} doesn't exist!"
     server.running? or Trollop::die "VM #{server_name} isn't running!"
     Kernel.exec("ssh -i #{server.ssh_key} #{server.login_username}@#{server.connection_address}")
+  when "address"
+    server.exists? or Trollop::die "VM #{server_name} doesn't exist!"
+    server.running? or Trollop::die "VM #{server_name} isn't running!"
+    puts "#{server.connection_address}"
   else
     Trollop::die "Unknown command: #{cmd}"
   end
