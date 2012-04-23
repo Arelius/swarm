@@ -2,9 +2,30 @@ require 'swarm-config'
 require 'uri'
 require 'net/http'
 
-# Find VBoxManage, try C:\Program File\Oracle\VirtualBox on windows.
+$VBoxCommand = nil
+
+def findvboxcommand()
+  vboxsearch = ["VBoxManage",
+                "C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe"]
+  vboxsearch.each do |cmd|
+    `#{cmd}`
+    if($?.success?)
+      return cmd
+    end
+  end
+  return nil
+end
+
 def vboxmanage(params)
-  return `VBoxManage #{params}`
+  if($VBoxCommand == nil)
+    $VBoxCommand = findvboxcommand()
+  end
+
+  if($VBoxCommand == nil)
+    die "Could not find VBoxManage"
+  end
+
+  return `"#{$VBoxCommand}" #{params}`
 end
 
 class VBox
