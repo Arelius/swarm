@@ -28,6 +28,29 @@ def vboxmanage(params)
   return `"#{$VBoxCommand}" #{params}`
 end
 
+def getbridgedifs()
+  vboxmanage("list bridgedifs").split("\n\n").map do |ifstr|
+    eth = {
+      :name => ifstr.scan(/^Name:[ \t]*(.*)$/)[0][0],
+      :ip => ifstr.scan(/^IPAddress:[ \t]*(.*)$/)[0][0],
+      :status => ifstr.scan(/^Status:[ \t]*(.*)$/)[0][0] == "Up"
+    }
+
+    if(eth[:ip] == "0.0.0.0")
+      eth[:status] = false
+    end
+
+    eth
+  end
+end
+
+def findsuitableif()
+  # We'll just use the first one with a valid status
+  getbridgedifs().find do |eth|
+    eth[:status]
+  end
+end
+
 class VBox
   def initialize(name)
     @base_vm = SwarmConfig.vbox_base_vm
@@ -45,6 +68,8 @@ class VBox
   end
 
   def start_server()
+    eth = findsuitableif()
+    vboxmanage("modifyvm #{@name} --nic1 bridged --bridgeadapter1 \"#{eth[:name]}\"")
     # We need to select the proper vm ethernet interface here.
     vboxmanage("startvm #{@name}") #'headless' if we want to hide it.
     get_instance_info()
