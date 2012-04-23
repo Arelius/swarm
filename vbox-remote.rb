@@ -2,6 +2,7 @@ require 'swarm-config'
 require 'uri'
 require 'net/http'
 
+# Find VBoxManage, try C:\Program File\Oracle\VirtualBox on windows.
 def vboxmanage(params)
   return `VBoxManage #{params}`
 end
@@ -23,6 +24,7 @@ class VBox
   end
 
   def start_server()
+    # We need to select the proper vm ethernet interface here.
     vboxmanage("startvm #{@name}") #'headless' if we want to hide it.
     get_instance_info()
   end
@@ -88,7 +90,7 @@ end
 def fetch(url)
   uri = URI(url)
 
-  File.open(File.basename(uri.path), "w") do |f|
+  File.open(File.basename(uri.path), "wb") do |f|
     Net::HTTP.start(uri.host) do |http|
       http.request_get(uri.path) do |resp|
         resp.read_body do |segment|
